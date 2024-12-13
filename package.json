@@ -40,6 +40,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@alicloud/ecs20140526": "^4.4.5",
     "aptx-validator": "^3.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",

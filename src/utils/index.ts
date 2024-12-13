@@ -1,5 +1,7 @@
 import { ERROR_CODE } from '@/exceptions';
+import AliyunException from '@/exceptions/AliyunException';
 import BaseException from '@/exceptions/BaseException';
+import { AliyunError } from '@/types';
 import { ENV_VARIABLE, PROCESS_ENV } from '@/utils/constants';
 /**
  * 判断参数是否为Error或自定义异常的实例
@@ -44,3 +46,21 @@ export const formResponse = (
   msg,
   data: data ?? null,
 });
+
+export const handleAliyunError = (error: AliyunError) => {
+  throw new AliyunException(
+    null,
+    error.code,
+    error.data?.Recommend,
+    error.data?.Message,
+  );
+};
+
+// export const pickProperty = <T, K extends keyof T>(obj: T, keys: K[]) => {
+//   return keys.reduce((prev, cur) => {
+//     return {
+//       ...prev,
+//       [cur]: obj[cur],
+//     };
+//   }, {} as Record<K extends Pick<keyof T, tpyeof T>, T>);
+// };

@@ -1,2 +1,4 @@
 import UserController from './user';
-export { UserController };
+import AliyunController from './aliyun';
+
+export { UserController, AliyunController };
