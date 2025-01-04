@@ -10,6 +10,7 @@ const errorHandler = (
   if (err) {
     const status = err.code ? 200 : 500;
     res.status(status).json({
+      success: false,
       code: err.code || 500,
       errMsg: err.errMsg || '',
       msg: err.msg || 'Bad Request',

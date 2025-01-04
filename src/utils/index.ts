@@ -3,6 +3,7 @@ import AliyunException from '@/exceptions/AliyunException';
 import BaseException from '@/exceptions/BaseException';
 import { AliyunError } from '@/types';
 import { ENV_VARIABLE, PROCESS_ENV } from '@/utils/constants';
+
 /**
  * 判断参数是否为Error或自定义异常的实例
  * @param {any} p
@@ -41,10 +42,12 @@ export const formResponse = (
   code: ERROR_CODE | 200 | 201 | 500,
   msg: string,
   data?: any,
+  success?: boolean,
 ) => ({
   code,
   msg,
   data: data ?? null,
+  success: success ?? true,
 });
 
 export const handleAliyunError = (error: AliyunError) => {
