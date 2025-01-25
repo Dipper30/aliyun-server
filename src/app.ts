@@ -5,7 +5,7 @@ import router from '@/routers';
 import { PROCESS_ENV } from '@/utils/constants';
 import { getEnv, isEnv } from '@/utils';
 import { APP_CONFIG } from '@/config';
-import { errorHandler } from './middlewares';
+import { errorHandler, tokenVerifier } from '@/middlewares';
 
 if (isEnv(PROCESS_ENV.UNKNOWN)) {
   throw new Error('Unknown Process Env');
@@ -40,6 +40,9 @@ app.all('*', async (req: Request, res: Response, next: NextFunction) => {
     next();
   }
 });
+
+// catch exception and log out error message
+app.use(tokenVerifier);
 
 // 设置路由
 router(app);
