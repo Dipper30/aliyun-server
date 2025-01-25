@@ -1,3 +1,4 @@
+import { AuthValidator } from '@/validators';
 import Aliyun from '@/validators/aliyun';
 import V1 from '@/validators/v1';
 import { AllValidator, Infer } from 'aptx-validator';
@@ -5,7 +6,7 @@ import { Dialect } from 'sequelize';
 
 export namespace Custom {
   export type Pagination<T = any> = T & {
-    pagination: {
+    pagination?: {
       page?: number;
       size?: number;
     };
@@ -17,11 +18,9 @@ export namespace Custom {
   };
 
   export type TokenDecode = {
-    uid: number;
-    rid: number;
+    id: number;
     iat: number;
     exp: number;
-    auth: number[];
   };
 }
 
@@ -75,10 +74,34 @@ export namespace AliyunParams {
   >;
 
   export type SendFile = GetType<AliyunInstance['sendFile']>;
+
+  export type ListFilesByDirectory = GetType<
+    AliyunInstance['listFilesByDirectory']
+  >;
+  export type SaveBucketFile = GetType<AliyunInstance['saveBucketFile']>;
+  export type GetFilePresignedUrl = GetType<
+    AliyunInstance['getFilePresignedUrl']
+  >;
+  export type DeleteBucketFiles = GetType<AliyunInstance['deleteBucketFiles']>;
+
+  export type CreateBucketDirectory = GetType<
+    AliyunInstance['createBucketDirectory']
+  >;
+  export type StartTTSTask = GetType<AliyunInstance['startTTSTask']>;
 }
 
 type V1Instance = typeof V1;
 
 export namespace V1Params {
   export type PostTest = GetType<V1Instance['postTest']>;
+}
+
+type AuthInstance = typeof AuthValidator;
+export namespace AuthParams {
+  export type AutoLogin = GetType<AuthInstance['autoLogin']>;
+  export type Login = GetType<AuthInstance['login']>;
+  export type GetUsers = GetType<AuthInstance['getUsers']>;
+  export type UpdateUserRole = GetType<AuthInstance['updateUserRole']>;
+  export type UpdateRole = GetType<AuthInstance['updateRole']>;
+  export type UpdateUserAccount = GetType<AuthInstance['updateUserAccount']>;
 }

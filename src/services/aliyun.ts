@@ -1,12 +1,9 @@
 import Ecs, * as $Ecs from '@alicloud/ecs20140526';
-import OpenApi, * as $OpenApi from '@alicloud/openapi-client';
-import Util, * as $Util from '@alicloud/tea-util';
-import * as $tea from '@alicloud/tea-typescript';
+import * as $OpenApi from '@alicloud/openapi-client';
 import BaseService from './base';
 import { APP_CONFIG } from '@/config';
-import AliyunException from '@/exceptions/AliyunException';
 import { handleAliyunError } from '@/utils';
-import { AliyunError, AliyunParams } from '@/types';
+import { AliyunParams } from '@/types';
 
 class Aliyun extends BaseService {
   client: Ecs;

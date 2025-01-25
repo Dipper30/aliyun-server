@@ -1,5 +1,5 @@
 import { array, boolean, number, object, string } from 'aptx-validator';
-import { paginationProperty } from './helpers';
+import { pagination, paginationProperty } from './helpers';
 
 class Aliyun {
   private regionId(strictRegion: boolean = false) {
@@ -103,6 +103,82 @@ class Aliyun {
       overwrite: boolean().optional(),
       /** 秒级 */
       timeout: number().optional(),
+    });
+  }
+
+  getPresignedUrl() {
+    return object({
+      fileName: string(),
+      fileType: string(),
+      method: string().oneof(['GET', 'PUT']),
+      bucketName: string(),
+      bucketRegion: string(),
+    });
+  }
+
+  // listFilesByDirectory() {
+  //   return object({
+  //     prefix: string().optional(),
+  //     continuationToken: string().optional(),
+  //     delimiter: string().optional(),
+  //     maxKeys: string().numeric().optional(),
+  //     bucketName: string(),
+  //     bucketRegion: string(),
+  //   });
+  // }
+
+  listFilesByDirectory() {
+    return object({
+      dirId: string().optional(),
+      bucketName: string(),
+      bucketRegion: string(),
+      pagination: pagination(true).optional(),
+    });
+  }
+
+  getFilePresignedUrl() {
+    return object({
+      fileUrl: string(),
+      bucketName: string(),
+      bucketRegion: string(),
+    });
+  }
+
+  saveBucketFile() {
+    return object({
+      dirId: string().optional(),
+      bucketName: string(),
+      bucketRegion: string(),
+      fileName: string(),
+      fileType: string(),
+      fileUrl: string(),
+      size: number(),
+      cacheControl: number().optional(),
+      description: string().optional(),
+    });
+  }
+
+  deleteBucketFiles() {
+    return object({
+      ids: array(string()),
+    });
+  }
+
+  createBucketDirectory() {
+    return object({
+      name: string().maxLength(50),
+      bucketName: string(),
+      bucketRegion: string(),
+      parentDirId: string().optional(),
+      description: string().optional(),
+    });
+  }
+
+  startTTSTask() {
+    return object({
+      texts: array(string()),
+      voice: string(),
+      speed: number().min(0).max(2).optional(),
     });
   }
 }

@@ -1,17 +1,15 @@
-import Ecs20140526, * as $Ecs20140526 from '@alicloud/ecs20140526';
-import OpenApi, * as $OpenApi from '@alicloud/openapi-client';
-import Util, * as $Util from '@alicloud/tea-util';
-import * as $tea from '@alicloud/tea-typescript';
 import { Router } from 'express';
 import { bodyValidator, paramsValidator } from '@/validators/helpers';
 import NoRoute from '../NoRoute';
 import { AliyunValidator as v } from '@/validators';
-import { AliyunController } from '@/controllers';
+import { AliyunController, CdnController } from '@/controllers';
+import { authChecker } from '@/middlewares';
+import { RoleCode } from '@/utils/constants';
 
 const router: Router = Router();
 
 router.post('/test', bodyValidator(v.postTest()), (req, res) => {
-  res.json(1);
+  res.json(2);
 });
 
 router.get('/regions', AliyunController.getRegions);
@@ -36,6 +34,7 @@ router.post(
 
 router.post(
   '/instance/start',
+  authChecker({ role: [RoleCode.SUPER_ADMIN] }),
   bodyValidator(v.startInstance()),
   AliyunController.startInstance,
 );
@@ -48,12 +47,14 @@ router.post(
 
 router.post(
   '/instance/stop',
+  authChecker({ role: [RoleCode.SUPER_ADMIN] }),
   bodyValidator(v.stopInstance()),
   AliyunController.stopInstance,
 );
 
 router.post(
   '/agent/runCommand',
+  authChecker({ role: [RoleCode.SUPER_ADMIN] }),
   bodyValidator(v.runCommand()),
   AliyunController.runCommand,
 );
@@ -69,6 +70,62 @@ router.post(
   bodyValidator(v.sendFile()),
   AliyunController.sendFile,
 );
+
+// #region Cdn
+router.post('/cdn/getSts', CdnController.getSts);
+router.post('/cdn/bucket/query', CdnController.getBuckets);
+router.get(
+  '/cdn/bucket/:name',
+  paramsValidator(['name']),
+  CdnController.getBucketDetail,
+);
+router.post(
+  '/cdn/presignedUrlForOss',
+  bodyValidator(v.getPresignedUrl()),
+  CdnController.getPresignedUrlForOss,
+);
+
+router.post(
+  '/cdn/file/query',
+  bodyValidator(v.listFilesByDirectory()),
+  CdnController.getFiles,
+);
+
+router.post(
+  '/cdn/file',
+  bodyValidator(v.saveBucketFile()),
+  CdnController.saveBucketFile,
+);
+
+router.post(
+  '/cdn/file/getUrl',
+  bodyValidator(v.getFilePresignedUrl()),
+  CdnController.getFilePresignedUrl,
+);
+
+router.delete(
+  '/cdn/files',
+  authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(v.deleteBucketFiles()),
+  CdnController.deleteBucketFiles,
+);
+
+router.post(
+  '/cdn/directory',
+  bodyValidator(v.createBucketDirectory()),
+  CdnController.createBucketDirectory,
+);
+
+// #endregion
+
+// #region Voice
+router.post(
+  '/voice/tts/start',
+  bodyValidator(v.startTTSTask()),
+  CdnController.startTTSTask,
+);
+
+// #endregion
 
 router.all('*', NoRoute);
 

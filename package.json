@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "export NODE_ENV=development && nodemon src/app.ts",
+    "start": "export NODE_ENV=production && nodemon src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "check": "tsc -p tsconfig.json --noEmit"
   },
@@ -26,9 +27,12 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.16.0",
+    "@types/ali-oss": "^6.16.11",
     "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.1",
     "@types/sequelize": "^4.28.20",
+    "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
     "eslint": "^9.16.0",
@@ -41,14 +45,21 @@
   },
   "dependencies": {
     "@alicloud/ecs20140526": "^4.4.5",
+    "@alicloud/sts-sdk": "^1.0.2",
+    "@alicloud/sts20150401": "^1.1.4",
+    "ali-oss": "^6.22.0",
     "aptx-validator": "^3.2.0",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-fileupload": "^1.5.1",
+    "jsonwebtoken": "^9.0.2",
     "module-alias": "^2.2.3",
     "mysql2": "^3.11.5",
     "npm": "^10.9.1",
     "sequelize": "^6.37.5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "uuid": "^11.0.5",
+    "ws": "^8.18.0"
   }
 }

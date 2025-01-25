@@ -1,10 +1,44 @@
 import { Custom } from '@/types';
+import {
+  UserModel,
+  RoleModel,
+  AuthModel,
+  RoleAuthModel,
+  BucketFileDirModel,
+  BucketFileModel,
+  sequelize,
+} from '@/db/models';
+import { Op } from 'sequelize';
 
 export default class BaseService {
   pager: Custom.Pagination = { page: 1, size: 20 };
 
+  Op: typeof Op;
+  models: {
+    user: typeof UserModel;
+    role: typeof RoleModel;
+    auth: typeof AuthModel;
+    roleAuth: typeof RoleAuthModel;
+    bucketFileDir: typeof BucketFileDirModel;
+    bucketFile: typeof BucketFileModel;
+  };
+  sequelize;
+
   constructor() {
-    //
+    this.models = {
+      user: UserModel,
+      role: RoleModel,
+      auth: AuthModel,
+      roleAuth: RoleAuthModel,
+      bucketFile: BucketFileModel,
+      bucketFileDir: BucketFileDirModel,
+    };
+    this.sequelize = sequelize;
+    this.Op = Op;
+  }
+
+  get activeUserModel() {
+    return this.models.user.scope('active');
   }
 
   /**

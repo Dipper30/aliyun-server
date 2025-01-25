@@ -1,8 +1,10 @@
+import crypto from 'crypto';
 import { ERROR_CODE } from '@/exceptions';
-import AliyunException from '@/exceptions/AliyunException';
-import BaseException from '@/exceptions/BaseException';
+import { AliyunException, BaseException } from '@/exceptions';
 import { AliyunError } from '@/types';
 import { ENV_VARIABLE, PROCESS_ENV } from '@/utils/constants';
+import { APP_CONFIG } from '@/config';
+
 /**
  * 判断参数是否为Error或自定义异常的实例
  * @param {any} p
@@ -41,13 +43,16 @@ export const formResponse = (
   code: ERROR_CODE | 200 | 201 | 500,
   msg: string,
   data?: any,
+  success?: boolean,
 ) => ({
   code,
   msg,
   data: data ?? null,
+  success: success ?? true,
 });
 
 export const handleAliyunError = (error: AliyunError) => {
+  console.error('Aliyun Error: ', error);
   throw new AliyunException(
     null,
     error.code,
@@ -64,3 +69,32 @@ export const handleAliyunError = (error: AliyunError) => {
 //     };
 //   }, {} as Record<K extends Pick<keyof T, tpyeof T>, T>);
 // };
+
+/**
+ * MD5加密
+ * @param {string} plainText
+ * @returns {string} 密文
+ */
+export const encryptMD5 = (plainText: string): string => {
+  return crypto
+    .createHash('md5')
+    .update(plainText)
+    .update(APP_CONFIG.KEYS.MD5_PRIVATE_KEY)
+    .digest('hex');
+};
+
+/**
+ * 获取当前 UNIX 时间戳
+ * @returns 10位时间戳(秒)
+ */
+export const getUnixTS = (): number => {
+  return Math.floor(new Date().getTime() / 1000);
+};
+
+/**
+ * 获取当前时间戳
+ * @returns {number} 13位时间戳(毫秒)
+ */
+export const getTS = (): number => {
+  return new Date().getTime();
+};
