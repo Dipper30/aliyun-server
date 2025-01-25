@@ -128,3 +128,14 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+db/model/*
+node_modules/*
+apps
+
+
+.DS_Store
+.env.local
+.env.development
+.env.production
