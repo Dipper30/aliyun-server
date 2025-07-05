@@ -6,6 +6,7 @@ import { PROCESS_ENV } from '@/utils/constants';
 import { getEnv, isEnv } from '@/utils';
 import { APP_CONFIG } from '@/config';
 import { errorHandler, tokenVerifier } from '@/middlewares';
+import ip from 'ip';
 
 if (isEnv(PROCESS_ENV.UNKNOWN)) {
   throw new Error('Unknown Process Env');
@@ -62,6 +63,7 @@ server.listen(PORT, () => {
   console.log(`Aliyun Server Started Successfully on port ${PORT}!`);
   // eslint-disable-next-line no-console
   console.log(`Current Env: ${ENV}`);
+  console.log(`local ip: ${ip.address()}`);
 });
 
 export default app;

@@ -17,8 +17,13 @@ export enum ERROR_CODE {
   AUTH_ERROR = 2020, // 权限错误
   ROLE_ERROR = 2030, // 角色错误
 
+  APP_ERROR = 6000, // 应用错误
+  APP_NOT_FOUND = 6004, // 应用错误
+
   ALIYUN_ERROR = 7000, // 阿里云错误
   ALIYUN_CDN_ERROR = 7100, // 阿里云 cdn 错误
+
+  GIT_ERROR = 7050, // Git 错误
 
   FILE_ERROR = 9000, // 文件错误
   NO_FILE_UPLOADED = 9004, // 未上传文件
@@ -40,8 +45,12 @@ export const ERROR_TEXT: Record<ERROR_CODE, string> = {
   [ERROR_CODE.AUTH_ERROR]: 'Auth Error',
   [ERROR_CODE.ROLE_ERROR]: 'Role Error',
 
+  [ERROR_CODE.APP_ERROR]: 'App Error',
+  [ERROR_CODE.APP_NOT_FOUND]: 'App Not Found',
+
   [ERROR_CODE.ALIYUN_ERROR]: 'Aliyun Error',
   [ERROR_CODE.ALIYUN_CDN_ERROR]: 'Aliyun Cdn Error',
+  [ERROR_CODE.GIT_ERROR]: 'Github Error',
 
   [ERROR_CODE.REQUEST_NOT_FOUND]: 'Request Not Responding',
   [ERROR_CODE.FILE_ERROR]: 'File Error',

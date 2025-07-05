@@ -1,12 +1,14 @@
 export enum PROCESS_ENV {
-  PRODUCTION = 'production',
-  SIMULATION = 'simulation',
-  DEVELOPMENT = 'development',
+  PRODUCTION = 'prod',
+  SIMULATION = 'stg',
+  TEST = 'test',
+  DEVELOPMENT = 'dev',
   UNKNOWN = 'unknown',
 }
 
 export const PORT = {
   [PROCESS_ENV.DEVELOPMENT]: 3030,
+  [PROCESS_ENV.TEST]: 3031,
   [PROCESS_ENV.SIMULATION]: 3031,
   [PROCESS_ENV.PRODUCTION]: 3030,
 };
@@ -39,6 +41,9 @@ export enum ENV_VARIABLE {
   ALIBABA_CLOUD_STS_ACCESS_KEY_SECRET = 'ALIBABA_CLOUD_STS_ACCESS_KEY_SECRET',
   ALIBABA_CLOUD_STS_ENDPOINT = 'ALIBABA_CLOUD_STS_ENDPOINT',
   ALIBABA_BAILIAN_API_KEY = 'ALIBABA_BAILIAN_API_KEY',
+
+  // git
+  GITHUB_APP_TOKEN = 'GITHUB_APP_TOKEN',
 }
 
 export enum AuthCode {
@@ -56,3 +61,5 @@ export enum RoleCode {
   BUZ = 50,
   USER = 100,
 }
+
+export const GITHUB_ORG = 'octokit';

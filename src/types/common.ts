@@ -93,7 +93,22 @@ export namespace AliyunParams {
 type V1Instance = typeof V1;
 
 export namespace V1Params {
+  export type AppById = GetType<V1Instance['appById']>;
   export type PostTest = GetType<V1Instance['postTest']>;
+  export type CreateApp = GetType<V1Instance['createApp']>;
+  export type QueryApps = GetType<V1Instance['queryApps']>;
+  export type InsertInstance = GetType<V1Instance['insertInstance']>;
+
+  export type SyncInstanceStatus = GetType<V1Instance['syncInstanceStatus']>;
+  export type SearchInstances = GetType<V1Instance['searchInstances']>;
+
+  export type GetGitWorkflows = GetType<V1Instance['getGitWorkflows']>;
+  export type TriggerWorkflow = GetType<V1Instance['triggerWorkflow']>;
+  export type ListGitWorkflowRuns = GetType<V1Instance['listGitWorkflowRuns']>;
+  export type GetGitWorkflowRun = GetType<V1Instance['getGitWorkflowRun']>;
+  export type GetGitWorkflowRunJobLogs = GetType<
+    V1Instance['getGitWorkflowRunJobLogs']
+  >;
 }
 
 type AuthInstance = typeof AuthValidator;

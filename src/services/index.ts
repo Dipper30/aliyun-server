@@ -4,6 +4,9 @@ import AuthService from './auth';
 import TokenService from './token';
 import HomeService from './home';
 import VoiceService from './voice';
+import AppService from './application';
+import InstanceService from './instance';
+import GitService from './git';
 
 export {
   AuthService,
@@ -12,4 +15,7 @@ export {
   AliyunService,
   CdnService,
   VoiceService,
+  AppService,
+  InstanceService,
+  GitService,
 };

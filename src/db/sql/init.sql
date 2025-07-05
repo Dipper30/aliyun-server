@@ -171,4 +171,75 @@ CREATE TABLE `BucketFiles` (
   CONSTRAINT `user_bucketfile_ibfk_2` FOREIGN KEY (`updatedBy`) REFERENCES `Users` (`id`),
   CONSTRAINT `user_bucketfile_ibfk_3` FOREIGN KEY (`dirId`) REFERENCES `BucketFileDirs` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-  -- CONSTRAINT `user_bucketfile_ibfk_3` FOREIGN KEY (`bucketName`, `bucketRegion`, `dirName`) REFERENCES `BucketFileDir` (`bucketName`, `bucketRegion`, `name`)
+
+
+-- ----------------------------
+-- Table structure for Application
+-- ----------------------------
+DROP TABLE IF EXISTS `Applications`;
+CREATE TABLE `Applications` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) UNIQUE NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(30) NOT NULL,
+  `info` json DEFAULT("{}"),
+  `gitRepo` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  `createdBy` int DEFAULT NULL,
+  `createdAt` int DEFAULT NULL,
+  `updatedBy` int DEFAULT NULL,
+  `updatedAt` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `user_application_ibfk_1` FOREIGN KEY (`createdBy`) REFERENCES `Users` (`id`),
+  CONSTRAINT `user_application_ibfk_2` FOREIGN KEY (`updatedBy`) REFERENCES `Users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Table structure for Instances
+-- ----------------------------
+DROP TABLE IF EXISTS `Instances`;
+CREATE TABLE `Instances` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `instanceId` varchar(255) NOT NULL COMMENT '阿里云实例ID',
+  `instanceName` varchar(255) NOT NULL COMMENT '实例名称',
+  `status` enum('Pending','Running','Starting','Stopping','Stopped') NOT NULL DEFAULT 'Pending' COMMENT '实例状态',
+  `regionId` varchar(255) NOT NULL COMMENT '地域ID',
+  `privateIpAddress` varchar(255) DEFAULT NULL COMMENT '私网IP地址',
+  `publicIpAddress` varchar(255) DEFAULT NULL COMMENT '公网IP地址',
+  `lastSyncTime` bigint DEFAULT NULL COMMENT '最后同步时间',
+  `cid` int DEFAULT NULL COMMENT '创建人id',
+  `deletedAt` datetime DEFAULT NULL,
+  `createdAt` bigint NOT NULL,
+  `updatedAt` bigint DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `instanceId` (`instanceId`),
+  KEY `cid` (`cid`),
+  KEY `regionId` (`regionId`),
+  KEY `status` (`status`),
+  KEY `instanceName` (`instanceName`),
+  CONSTRAINT `user_instance_ibfk_1` FOREIGN KEY (`cid`) REFERENCES `Users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- ----------------------------
+-- Table structure for ApplicationInstances
+-- ----------------------------
+DROP TABLE IF EXISTS `ApplicationInstances`;
+CREATE TABLE `ApplicationInstances` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `appId` int UNSIGNED NOT NULL,
+  `instanceId` int UNSIGNED NOT NULL,
+  `env` varchar(16) NOT NULL,
+  `localPort` int UNSIGNED NOT NULL DEFAULT 8080,
+  `port` int UNSIGNED NOT NULL DEFAULT 8080,
+  `testPort` int UNSIGNED NOT NULL DEFAULT 8080,
+  `testPath` varchar(100) DEFAULT '/status',
+  `createdAt` int UNSIGNED NOT NULL DEFAULT (FLOOR(UNIX_TIMESTAMP(NOW()))),
+  `updatedAt` int UNSIGNED NOT NULL DEFAULT (FLOOR(UNIX_TIMESTAMP(NOW()))),
+  PRIMARY KEY (`id`),
+  KEY `appId` (`appId`),
+  KEY `instanceId` (`instanceId`),
+  CONSTRAINT `applicationinstances_ibfk_1` FOREIGN KEY (`appId`) REFERENCES `Applications` (`id`),
+  CONSTRAINT `applicationinstances_ibfk_2` FOREIGN KEY (`instanceId`) REFERENCES `Instances` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

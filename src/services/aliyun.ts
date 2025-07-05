@@ -9,11 +9,12 @@ class Aliyun extends BaseService {
   client: Ecs;
   constructor() {
     super();
-    let config = new $OpenApi.Config({
+    const config = new $OpenApi.Config({
       accessKeyId: APP_CONFIG.ALIYUN.ALIBABA_CLOUD_ACCESS_KEY_ID,
       accessKeySecret: APP_CONFIG.ALIYUN.ALIBABA_CLOUD_ACCESS_KEY_SECRET,
+      endpoint: APP_CONFIG.ALIYUN.ALIBABA_CLOUD_ENDPOINT,
+      logger: console,
     });
-    config.endpoint = APP_CONFIG.ALIYUN.ALIBABA_CLOUD_ENDPOINT;
     this.client = new Ecs(config);
   }
 
@@ -75,7 +76,11 @@ class Aliyun extends BaseService {
 
     try {
       const response = await this.client.describeInstanceStatus(request);
-      return response.body?.instanceStatuses?.instanceStatus;
+      const instanceStatuses = response.body?.instanceStatuses?.instanceStatus;
+      if (!instanceStatuses || instanceStatuses.length === 0) {
+        throw new Error(`实例不存在或未启动`);
+      }
+      return instanceStatuses;
     } catch (error) {
       handleAliyunError(error as any);
     }
@@ -93,7 +98,34 @@ class Aliyun extends BaseService {
 
     try {
       const response = await this.client.describeInstances(request);
-      return response.body;
+      const instances = response.body?.instances?.instance;
+      return instances;
+    } catch (error: any) {
+      handleAliyunError(error);
+    }
+  }
+
+  /**
+   * 根据实例ID获取单个实例详情
+   * @param instanceId 实例ID
+   * @param regionId 地域ID（可选，如果不提供会尝试从本地数据库获取）
+   * @returns
+   */
+  async getInstanceById(instanceId: string, regionId?: string) {
+    const request = new $Ecs.DescribeInstancesRequest({
+      regionId,
+      instanceIds: [instanceId],
+    });
+
+    try {
+      const response = await this.client.describeInstances(request);
+      const instances = response.body?.instances?.instance;
+
+      if (!instances || instances.length === 0) {
+        throw new Error(`实例 ${instanceId} 不存在`);
+      }
+
+      return instances[0]; // 返回第一个匹配的实例
     } catch (error: any) {
       handleAliyunError(error);
     }
@@ -150,6 +182,7 @@ class Aliyun extends BaseService {
     const request = new $Ecs.StartInstanceRequest({
       instanceId: data.instanceId,
       dryRun: true,
+      stoppedMode: data.stoppedMode,
     });
 
     try {

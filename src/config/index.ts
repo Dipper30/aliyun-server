@@ -7,11 +7,14 @@ import { Dialect } from 'sequelize';
 
 // Read .env files
 const appDirectory = fs.realpathSync(process.cwd());
+const hasEnvFile = fs.existsSync('.env');
 const resolveApp = (relativePath: string) =>
   path.resolve(appDirectory, relativePath);
 const pathsDotenv = resolveApp('.env');
 const ENV = process.env.NODE_ENV?.trim() || PROCESS_ENV.DEVELOPMENT;
-if (ENV === PROCESS_ENV.DEVELOPMENT) {
+if (hasEnvFile) {
+  dotEnv.config();
+} else if (ENV === PROCESS_ENV.DEVELOPMENT) {
   dotEnv.config({ path: `${pathsDotenv}.${PROCESS_ENV.DEVELOPMENT}` });
 } else if (ENV === PROCESS_ENV.SIMULATION) {
   dotEnv.config({ path: `${pathsDotenv}.${PROCESS_ENV.SIMULATION}` });
@@ -61,6 +64,10 @@ const APP_CONFIG = {
       ENV_VARIABLE.ALIBABA_CLOUD_STS_ACCESS_KEY_SECRET,
     ),
     ALIBABA_BAILIAN_API_KEY: getConfig(ENV_VARIABLE.ALIBABA_BAILIAN_API_KEY),
+  },
+
+  GIT: {
+    GITHUB_APP_TOKEN: getConfig(ENV_VARIABLE.GITHUB_APP_TOKEN),
   },
 };
 const db: Config.Database = {

@@ -1,13 +1,27 @@
 declare global {
   namespace Express {
-    export interface Request {
+    interface Request {
       user: {
         id: number;
-        [key: string]: any;
+        rid: number;
+        auth: number[];
       };
     }
   }
 }
 
-// ! to make the file a module and avoid the TypeScript error
+// This export is needed to make the file a module
 export {};
+
+// ! to make the file a module and avoid the TypeScript error
+// export {};
+
+// src/types/express.d.ts
+// declare module 'express' {
+//   interface Request {
+//     user?: {
+//       id: number;
+//       name: string;
+//     };
+//   }
+// }

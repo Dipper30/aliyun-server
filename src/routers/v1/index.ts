@@ -1,9 +1,15 @@
 import { Router } from 'express';
-import { AuthController, HomeController } from '@/controllers';
-import { AuthValidator } from '@/validators';
+import {
+  AppController,
+  AuthController,
+  HomeController,
+  InstanceController,
+} from '@/controllers';
+import { AppValidator, AuthValidator, ValidatorV1 } from '@/validators';
 import { authChecker, bodyValidator, paramsValidator } from '@/middlewares';
 import NoRoute from '../NoRoute';
 import { AuthCode, RoleCode } from '@/utils/constants';
+// import gitRouter from './git';
 
 const router: Router = Router();
 
@@ -130,6 +136,121 @@ router.get(
   authChecker({ role: [RoleCode.SUPER_ADMIN, RoleCode.ADMIN] }),
   HomeController.getMonthlyActiveUsers,
 );
+
+// #region application
+router.post(
+  '/application',
+  authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(AppValidator.create()),
+  AppController.create,
+);
+
+router.post(
+  '/application/query',
+  bodyValidator(AppValidator.query()),
+  AppController.query,
+);
+
+router.post(
+  '/application/instance/insert',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.insertInstance()),
+  AppController.insertInstance,
+);
+
+router.post(
+  '/application/instance/insert',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.insertInstance()),
+  AppController.insertInstance,
+);
+
+router.get(
+  '/application/git/repo',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.appById()),
+  AppController.getRepoInfo,
+);
+
+router.post(
+  '/application/git/workflow/list',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.appById()),
+  AppController.listGitWorkflows,
+);
+
+router.post(
+  '/application/git/workflow/trigger',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.triggerWorkflow()),
+  AppController.triggerGitWorkflow,
+);
+
+router.post(
+  '/application/git/run/list',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.listGitWorkflowRuns()),
+  AppController.listGitWorkflowRuns,
+);
+
+router.post(
+  '/application/git/run/detail',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.getGitWorkflowRun()),
+  AppController.getGitWorkflowRun,
+);
+
+router.post(
+  '/application/git/run/job/list',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.getGitWorkflowRun()),
+  AppController.listGitWorkflowRunJobs,
+);
+
+router.post(
+  '/application/git/run/job/detail',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.getGitWorkflowRunJobLogs()),
+  AppController.getGitWorkflowRunJobDetail,
+);
+
+router.post(
+  '/application/git/run/job/logs/query',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.getGitWorkflowRunJobLogs()),
+  AppController.getGitWorkflowRunJobLogs,
+);
+
+router.post(
+  '/application/git/run/logs/query',
+  // authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.getGitWorkflowRun()),
+  AppController.getGitWorkflowRunLogs,
+);
+// #endregion
+
+// #region instance
+// 同步实例状态
+router.post(
+  '/instance/sync',
+  authChecker({ role: [RoleCode.SUPER_ADMIN] }),
+  bodyValidator(ValidatorV1.syncInstanceStatus()),
+  InstanceController.syncInstanceStatus,
+);
+
+router.post(
+  '/instance/query',
+  bodyValidator(ValidatorV1.searchInstances()),
+  InstanceController.searchInstances,
+);
+
+// #endregion
+
+// #region git
+// router.use('/git', gitRouter);
+// #endregion
+
+// router.use('/server-apps', serverAppRouter);
 
 router.all('*', NoRoute);
 

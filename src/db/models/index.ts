@@ -7,3 +7,6 @@ export * from './Authority';
 export * from './RoleAuthority';
 export * from './BucketFile';
 export * from './BucketFileDir';
+export * from './Application';
+export * from './Instance';
+export * from './ApplicationInstance';

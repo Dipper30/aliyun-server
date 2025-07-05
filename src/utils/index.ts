@@ -40,7 +40,7 @@ export const getConfig = (attribute: ENV_VARIABLE) => {
  * json 格式返回请求数据
  */
 export const formResponse = (
-  code: ERROR_CODE | 200 | 201 | 500,
+  code: ERROR_CODE | 200 | 201 | 204 | 500,
   msg: string,
   data?: any,
   success?: boolean,

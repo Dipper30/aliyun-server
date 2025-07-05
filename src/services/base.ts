@@ -6,7 +6,10 @@ import {
   RoleAuthModel,
   BucketFileDirModel,
   BucketFileModel,
+  AppModel,
+  InstanceModel,
   sequelize,
+  AppInstanceModel,
 } from '@/db/models';
 import { Op } from 'sequelize';
 
@@ -21,6 +24,9 @@ export default class BaseService {
     roleAuth: typeof RoleAuthModel;
     bucketFileDir: typeof BucketFileDirModel;
     bucketFile: typeof BucketFileModel;
+    app: typeof AppModel;
+    instance: typeof InstanceModel;
+    appInstance: typeof AppInstanceModel;
   };
   sequelize;
 
@@ -32,6 +38,9 @@ export default class BaseService {
       roleAuth: RoleAuthModel,
       bucketFile: BucketFileModel,
       bucketFileDir: BucketFileDirModel,
+      app: AppModel,
+      instance: InstanceModel,
+      appInstance: AppInstanceModel,
     };
     this.sequelize = sequelize;
     this.Op = Op;
@@ -68,5 +77,16 @@ export default class BaseService {
       else sortClause.push([key, 'desc']);
     }
     return sortClause;
+  }
+
+  whereClause(data?: Record<string, any>) {
+    if (!data) return {};
+    const v: Record<string, any> = {};
+    for (const key of Object.keys(data)) {
+      if (data[key] !== undefined) {
+        v[key] = data[key];
+      }
+    }
+    return v;
   }
 }

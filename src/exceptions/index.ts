@@ -7,6 +7,8 @@ import RequestNotFoundException from './RequestNotFoundException';
 import BaseException from './BaseException';
 import AliyunException from './AliyunException';
 import CdnException from './CdnException';
+import AppException from './AppException';
+import GitException from './GitException';
 export * from './enums';
 
 export {
@@ -19,4 +21,6 @@ export {
   RequestNotFoundException,
   AliyunException,
   CdnException,
+  AppException,
+  GitException,
 };
